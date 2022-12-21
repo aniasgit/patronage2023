@@ -1,0 +1,35 @@
+* {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	font-family: "Open Sans", sans-serif;
+	background-color: whitesmoke;
+}
+
+nav {
+	position: sticky;
+	display: flex;
+	align-items: center;
+	height: 56px;
+	background-color: #1378bd;
+	color: white;
+}
+
+.nav-logged {
+	position: absolute;
+	right: 0;
+}
+
+nav a {
+	padding: 0 20px;
+	text-decoration: none;
+	color: white;
+	font-size: 16px;
+}
+
+.hide {
+	display: none;
+}
