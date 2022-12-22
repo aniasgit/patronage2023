@@ -1,4 +1,6 @@
 const contents = document.querySelectorAll("section");
+const routes = [];
+contents.forEach((content) => routes.push(content.id));
 
 const navMain = document.querySelector(".nav-main");
 const navLogged = document.querySelector(".nav-logged");
@@ -13,8 +15,8 @@ const setContent = (id) => {
 	});
 };
 
-const setNavbar = (location) => {
-	if (location === "#user") {
+const setNavbar = (id) => {
+	if (id === "user") {
 		navMain.classList.add("hide");
 		navLogged.classList.remove("hide");
 	} else {
@@ -23,49 +25,22 @@ const setNavbar = (location) => {
 	}
 };
 
-const homeView = () => {
-	setContent("home");
-};
+const setView = (id) => {
+	if (!routes.includes(id)) {
+		id = "page-not-found";
+	}
 
-const loginView = () => {
-	setContent("login");
-};
-
-const registerView = () => {
-	setContent("register");
-};
-
-const userView = () => {
-	setContent("user");
-};
-
-const pageNotFoundView = () => {
-	setContent("page-not-found");
+	setContent(id);
+	setNavbar(id);
 };
 
 const locationHandler = () => {
-	const location = window.location.hash;
-
-	setNavbar(location);
-
-	switch (location) {
-		case "":
-			homeView();
-			break;
-		case "#login":
-			loginView();
-			break;
-		case "#register":
-			registerView();
-			break;
-		case "#user":
-			userView();
-			break;
-		default:
-			pageNotFoundView();
+	let location = window.location.hash.replace("#", "");
+	if (location === "") {
+		location = "home";
 	}
 
-	console.log(location);
+	setView(location);
 };
 
 window.addEventListener("hashchange", locationHandler);
