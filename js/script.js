@@ -44,3 +44,4 @@ const locationHandler = () => {
 };
 
 window.addEventListener("hashchange", locationHandler);
+window.addEventListener("load", locationHandler);
