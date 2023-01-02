@@ -33,42 +33,10 @@ section {
 	background-color: white;
 }
 
-.form-card {
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-	padding: 20px 30px;
-	font-size: 18px;
-	color: #1378bd;
-}
-
 .card h1 {
 	text-align: center;
 	margin-bottom: 16px;
 	text-shadow: 1px 1px 1px lightblue;
-}
-
-.card label {
-	display: inline-block;
-	margin-top: 10px;
-	font-weight: bold;
-}
-
-.card input {
-	padding: 2px 0;
-	width: 100%;
-	border: none;
-	border: 1px solid black;
-	border-radius: 3px;
-	box-shadow: none;
-}
-
-.card button {
-	width: 100%;
-	font-size: 18px;
-	margin-top: 32px;
-	margin-bottom: 16px;
 }
 
 .btn {
@@ -87,6 +55,40 @@ section {
 .hide {
 	display: none;
 }
+
+/* forms */
+form {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: left;
+	padding: 20px;
+	font-size: 18px;
+	color: #1378bd;
+}
+
+form label {
+	display: inline-block;
+	margin-top: 10px;
+	font-weight: bold;
+}
+
+form input {
+	padding: 2px 4px;
+	height: 32px;
+	width: 100%;
+	border: none;
+	border: 1px solid black;
+	border-radius: 3px;
+	box-shadow: none;
+}
+
+form button {
+	width: 100%;
+	font-size: 18px;
+	margin-top: 24px;
+}
+
 .validation-msg {
 	font-size: 12px;
 	color: red;
@@ -139,16 +141,53 @@ nav a {
 
 @media (min-width: 768px) {
 	.card {
-		width: 600px;
+		width: 700px;
 	}
 
-	.card form {
+	/* form */
+
+	form {
+		padding: 30px;
+	}
+
+	form div {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+	}
+
+	form input {
+		margin: 8px 0;
 		width: 70%;
 	}
 
-	.card input {
-		margin: 4px 0;
-		height: 32px;
+	form label {
+		display: inline;
+		padding-right: 8px;
+		margin-top: 0px;
+		width: 30%;
+		font-weight: bold;
+		text-align: right;
+	}
+
+	.validation-msg {
+		width: 70%;
+		margin: 0 0 0 auto;
+	}
+
+	/* login form */
+
+	#login form input {
+		width: 58%;
+	}
+
+	#login form label {
+		width: 42%;
+	}
+
+	#login .validation-msg {
+		width: 58%;
+		margin: 0 0 0 auto;
 	}
 
 	/* home page */

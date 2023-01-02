@@ -15,8 +15,8 @@
 <body>
     <nav>
         <div class="nav-main">
-            <a href="#login">Logowanie</a>
-            <a href="#register">Rejestracja</a>
+            <a id="login-link" href="#login">Logowanie</a>
+            <a id="register-link" href="#register">Rejestracja</a>
             <a href="#user">użytkownik</a>
         </div>
         <div class="nav-logged hide">
@@ -36,35 +36,47 @@
         </section>
         <section class="hide" id="login">
             <div class="card form-card">
-                <h1>Logowanie</h1>
                 <form action="">
-                    <label>Nazwa użytkownika:</label>
-                    <input type="text">
+                    <h1>Logowanie</h1>
+                    <div>
+                        <label for="">Email lub nazwa użytkownika:</label>
+                        <input type="text">
+                    </div>
                     <p class="validation-msg hide">Błedy walidacji</p>
-                    <label>Hasło:</label>
-                    <input type="password">
+                    <div>
+                        <label>Hasło:</label>
+                        <input type="password">
+                    </div>
                     <p class="validation-msg hide">Błedy walidacji</p>
                     <button class="btn primary-btn">Zaloguj</button>
                 </form>
             </div>
         </section>
         <section class="hide" id="register">
-            <div class="card form-card">
-                <h1>Rejestracja</h1>
+            <div class="card ">
                 <form action="">
-                    <label>Nazwa użytkownika:</label>
-                    <input type="text">
-                    <p class="validation-msg hide">Błedy walidacji</p>
-                    <label>Hasło:</label>
-                    <input type="password">
-                    <p class="validation-msg hide">Błedy walidacji</p>
-                    <label>Powtórz hasło:</label>
-                    <input type="password">
-                    <p class="validation-msg hide">Błedy walidacji</p>
-                    <label>Email:</label>
-                    <input type="email">
-                    <p class="validation-msg hide">Błedy walidacji</p>
-                    <button class="btn primary-btn">Zarejestruj</button>
+                    <h1>Rejestracja</h1>
+                    <div>
+                        <label for="registration-user-name">Nazwa użytkownika:</label>
+                        <input id="registration-user-name" type="text">
+                    </div>
+                    <p id="registration-user-name-validation-msg" class="validation-msg hide">Błedy walidacji</p>
+                    <div>
+                        <label for="registration-password">Hasło:</label>
+                        <input id="registration-password" type="password">
+                    </div>
+                    <p id="registration-password-validation-msg" class="validation-msg hide">Błedy walidacji</p>
+                    <div>
+                        <label for="registration-email">Email:</label>
+                        <input id="registration-email">
+                    </div>
+                    <p id="registration-email-validation-msg" class="validation-msg hide">Błedy walidacji</p>
+                    <div>
+                        <label for="registration-confirm-email">Potwierdź email:</label>
+                        <input id="registration-confirm-email">
+                    </div>
+                    <p id="registration-confirm-email-validation-msg" class="validation-msg hide">Błedy walidacji</p>
+                    <button id="register-btn" class="btn primary-btn">Zarejestruj</button>
                 </form>
             </div>
         </section>
