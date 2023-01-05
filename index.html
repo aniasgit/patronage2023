@@ -21,7 +21,7 @@
         </div>
         <div class="nav-logged hide">
             <span>Nazwa użytkownika</span>
-            <a href="#">Wyloguj</a>
+            <a id="logout-link" href="#">Wyloguj</a>
         </div>
     </nav>
     <main>
@@ -36,25 +36,25 @@
         </section>
         <section class="hide" id="login">
             <div class="card form-card">
-                <form action="">
+                <form id="login-form">
                     <h1>Logowanie</h1>
                     <div>
-                        <label for="">Email lub nazwa użytkownika:</label>
-                        <input type="text">
+                        <label for="login-user-name-or-email">Email lub nazwa użytkownika:</label>
+                        <input id="login-user-name-or-email">
                     </div>
-                    <p class="validation-msg hide">Błedy walidacji</p>
+                    <p id="login-user-name-validation-msg" class="validation-msg hide">Błedy walidacji</p>
                     <div>
-                        <label>Hasło:</label>
-                        <input type="password">
+                        <label for="login-password">Hasło:</label>
+                        <input id="login-password" type="password">
                     </div>
-                    <p class="validation-msg hide">Błedy walidacji</p>
-                    <button class="btn primary-btn">Zaloguj</button>
+                    <p id="login-password-validation-msg" class="validation-msg hide">Błedy walidacji</p>
+                    <button id="login-btn" class="btn primary-btn">Zaloguj</button>
                 </form>
             </div>
         </section>
         <section class="hide" id="register">
             <div class="card ">
-                <form action="">
+                <form id="register-form">
                     <h1>Rejestracja</h1>
                     <div>
                         <label for="registration-user-name">Nazwa użytkownika:</label>

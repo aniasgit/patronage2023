@@ -4,25 +4,47 @@ contents.forEach((content) => routes.push(content.id));
 
 const navMain = document.querySelector(".nav-main");
 const navLogged = document.querySelector(".nav-logged");
+const userNameSpan = document.querySelector(".nav-logged span");
+const logoutLink = document.querySelector("#logout-link");
 const loginLink = document.querySelector("#login-link");
 const registerLink = document.querySelector("#register-link");
 
+const loggedUserId = localStorage.getItem("logged");
+let loggedUser = JSON.parse(localStorage.getItem(loggedUserId));
+if (loggedUserId !== null) {
+	userNameSpan.textContent = loggedUser.userName;
+	window.location.href = "#user";
+}
+
+// Login variables
+let loginForm = document.querySelector("#login-form");
+const loginBtn = document.querySelector("#login-btn");
+let loginUserNameEmail = document.querySelector("#login-user-name-or-email");
+let loginPassword = document.querySelector("#login-password");
+const loginUserNameMsg = document.querySelector(
+	"#login-user-name-validation-msg"
+);
+const loginPasswordMsg = document.querySelector(
+	"#login-password-validation-msg"
+);
+
 // Registration variables
+let registerForm = document.querySelector("#register-form");
 const registerBtn = document.querySelector("#register-btn");
-const registrationUserName = document.querySelector("#registration-user-name");
+let registrationUserName = document.querySelector("#registration-user-name");
+let registrationPassword = document.querySelector("#registration-password");
+let registrationEmail = document.querySelector("#registration-email");
+let registrationConfirmEmail = document.querySelector(
+	"#registration-confirm-email"
+);
 const registrationUserNameMsg = document.querySelector(
 	"#registration-user-name-validation-msg"
 );
-const registrationPassword = document.querySelector("#registration-password");
 const registrationPasswordMsg = document.querySelector(
 	"#registration-password-validation-msg"
 );
-const registrationEmail = document.querySelector("#registration-email");
 const registrationEmailMsg = document.querySelector(
 	"#registration-email-validation-msg"
-);
-const registrationConfirmEmail = document.querySelector(
-	"#registration-confirm-email"
 );
 const registrationConfirmEmailMsg = document.querySelector(
 	"#registration-confirm-email-validation-msg"
@@ -32,7 +54,12 @@ const registrationConfirmEmailMsg = document.querySelector(
 const setContent = (id) => {
 	contents.forEach((content) => {
 		if (content.id === id) {
-			content.classList.remove("hide");
+			if (id === "user" && loggedUser == null) {
+				// dopisać coś ładniejszego
+				console.log("brak zalogowanego użytkownika");
+			} else {
+				content.classList.remove("hide");
+			}
 		} else {
 			content.classList.add("hide");
 		}
@@ -81,27 +108,41 @@ const locationHandler = () => {
 	setView(location);
 };
 
+// Message setting
+const setMessage = (messageComponent, message) => {
+	messageComponent.textContent = message;
+	messageComponent.classList.remove("hide");
+};
+
+const clearMessage = (messageComponent) => {
+	messageComponent.textContent = "";
+	messageComponent.classList.add("hide");
+};
+
 // Validation
 const validateRegistrationUserName = () => {
 	const min = 6;
 	const max = 16;
 
-	registrationUserNameMsg.classList.remove("hide");
-
 	if (registrationUserName.value === "") {
-		registrationUserNameMsg.textContent =
-			"Nazwa użytkownika nie może być pusta.";
+		setMessage(registrationUserNameMsg, "Nazwa użytkownika nie może być pusta");
 	} else if (registrationUserName.value.length < min) {
-		registrationUserNameMsg.textContent =
-			"Nazwa użytkownika musi mieć przynajmniej 6 znaków.";
+		setMessage(
+			registrationUserNameMsg,
+			"Nazwa użytkownika musi mieć przynajmniej 6 znaków."
+		);
 	} else if (registrationUserName.value.length > max) {
-		registrationUserNameMsg.textContent =
-			"Nazwa użytkownika nie może być dłuższa niż 16 znaków.";
+		setMessage(
+			registrationUserNameMsg,
+			"Nazwa użytkownika nie może być dłuższa niż 16 znaków."
+		);
 	} else if (!/^[A-Za-z0-9]*$/.test(registrationUserName.value)) {
-		registrationUserNameMsg.textContent =
-			"Nazwa użytkownika może składać się tylko z liter lub cyfr.";
+		setMessage(
+			registrationUserNameMsg,
+			"Nazwa użytkownika może składać się tylko z liter lub cyfr."
+		);
 	} else {
-		registrationUserNameMsg.classList.add("hide");
+		clearMessage(registrationUserNameMsg);
 		return true;
 	}
 
@@ -112,30 +153,28 @@ const validateRegistrationPassword = () => {
 	const min = 6;
 
 	if (registrationPassword.value.length < min) {
-		registrationPasswordMsg.textContent =
-			"Hasło musi mieć przynajmniej 6 znaków";
-		registrationPasswordMsg.classList.remove("hide");
-		return false;
+		setMessage(
+			registrationPasswordMsg,
+			"Hasło musi mieć przynajmniej 6 znaków."
+		);
 	} else {
-		registrationPasswordMsg.classList.add("hide");
+		clearMessage(registrationPasswordMsg);
 		return true;
 	}
 };
 
 const validateRegistrationEmail = () => {
 	if (registrationEmail.value === "") {
-		registrationEmailMsg.textContent = "Email nie może być pusty.";
-		registrationEmailMsg.classList.remove("hide");
+		setMessage(registrationEmailMsg, "Email nie może być pusty.");
 	} else if (
 		registrationEmail.value.match(
 			/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 		)
 	) {
-		registrationEmailMsg.classList.add("hide");
+		clearMessage(registrationEmailMsg);
 		return true;
 	} else {
-		registrationEmailMsg.textContent = "Nieprawidłowy format email.";
-		registrationEmailMsg.classList.remove("hide");
+		setMessage(registrationEmailMsg, "Nieprawidłowy format email.");
 	}
 
 	return false;
@@ -143,19 +182,83 @@ const validateRegistrationEmail = () => {
 
 const validateRegistrationConfirmEmail = () => {
 	if (registrationConfirmEmail.value === "") {
-		registrationConfirmEmailMsg.textContent =
-			"Pole potwierdź email nie może być puste.";
-		registrationConfirmEmailMsg.classList.remove("hide");
+		setMessage(
+			registrationConfirmEmailMsg,
+			"Pole potwierdź email nie może być puste."
+		);
 	} else if (registrationConfirmEmail.value !== registrationEmail.value) {
-		registrationConfirmEmailMsg.textContent =
-			"Adresy email muszą być takie same.";
-		registrationConfirmEmailMsg.classList.remove("hide");
+		setMessage(
+			registrationConfirmEmailMsg,
+			"Adresy email muszą być takie same."
+		);
 	} else {
-		registrationConfirmEmailMsg.classList.add("hide");
+		clearMessage(registrationConfirmEmailMsg);
 		return true;
 	}
 
 	return false;
+};
+
+const validateLoginEmailorUserName = () => {
+	if (loginUserNameEmail.value === "") {
+		setMessage(
+			loginUserNameMsg,
+			"Pole email lub nazwa użytkownika nie może być puste."
+		);
+	} else if (!isExistInLocalStorage(loginUserNameEmail.value)) {
+		setMessage(loginUserNameMsg, "Taki użytkownik nie istnieje.");
+		// Dorób propozycje rejestracji
+	} else {
+		clearMessage(loginUserNameMsg);
+		return true;
+	}
+
+	return false;
+};
+
+const validateLoginPassword = () => {
+	if (loginPassword.value === "") {
+		setMessage(loginPasswordMsg, "Hasło nie może być puste");
+	} else {
+		clearMessage(loginPasswordMsg);
+		return true;
+	}
+
+	return false;
+};
+
+// Checikng if key exists in localStorage
+const isExistInLocalStorage = (key) => {
+	return !(localStorage.getItem(key) === null);
+};
+
+//Login/logout
+const checkLoginPassword = (userId) => {
+	const password = JSON.parse(localStorage.getItem(userId)).password;
+
+	return password === loginPassword.value;
+};
+const login = (userId) => {
+	localStorage.setItem("logged", userId);
+	loggedUser = JSON.parse(localStorage.getItem(userId));
+	userNameSpan.textContent = loggedUser.userName;
+	window.location.href = "#user";
+};
+
+const logout = () => {
+	localStorage.removeItem("logged");
+	loggedUser = null;
+	userNameSpan.textContent = "";
+};
+
+const clearForm = (form) => {
+	let inputs = form.querySelectorAll("input");
+	inputs.forEach((input) => (input.value = ""));
+
+	const validationMessages = form.querySelectorAll(".validation-msg");
+	validationMessages.forEach((validationMessage) =>
+		clearMessage(validationMessage)
+	);
 };
 
 const handleRegisterBtn = () => {
@@ -165,11 +268,67 @@ const handleRegisterBtn = () => {
 	validation.push(validateRegistrationEmail());
 	validation.push(validateRegistrationConfirmEmail());
 
-	console.log(validation);
-	if (!validation.includes(false)) console.log("Idziemy dalej");
+	if (isExistInLocalStorage(registrationEmail.value)) {
+		setMessage(registrationEmailMsg, "Ten adres email jest już zajęty");
+		validation.push(false);
+	} else {
+		clearMessage(registrationEmailMsg);
+	}
+
+	if (isExistInLocalStorage(registrationUserName.value)) {
+		setMessage(
+			registrationUserNameMsg,
+			"Ta nazwa użytkownika jest już zajęta."
+		);
+		validation.push(false);
+	} else {
+		clearMessage(registrationUserNameMsg);
+	}
+
+	if (!validation.includes(false)) {
+		const newUser = {
+			userName: registrationUserName.value,
+			email: registrationEmail.value,
+			password: registrationPassword.value,
+		};
+
+		localStorage.setItem(newUser.email, JSON.stringify(newUser));
+		localStorage.setItem(newUser.userName, newUser.email);
+		login(newUser.email);
+		clearForm(registerForm);
+	}
+};
+
+const handleLoginBtn = () => {
+	const validation = [];
+	let userId;
+
+	validation.push(validateLoginEmailorUserName());
+	validation.push(validateLoginPassword());
+
+	if (!validation.includes(false)) {
+		if (
+			loginUserNameEmail.value.match(
+				/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+			)
+		) {
+			userId = loginUserNameEmail.value;
+		} else {
+			userId = localStorage.getItem(loginUserNameEmail.value);
+		}
+
+		if (checkLoginPassword(userId)) {
+			login(userId);
+			clearForm(loginForm);
+		} else {
+			setMessage(loginPasswordMsg, "Hasło jest nieprawidłowe.");
+		}
+	}
 };
 
 window.addEventListener("hashchange", locationHandler);
 window.addEventListener("load", locationHandler);
 
 registerBtn.addEventListener("click", handleRegisterBtn);
+loginBtn.addEventListener("click", handleLoginBtn);
+logoutLink.addEventListener("click", logout);

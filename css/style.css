@@ -96,7 +96,7 @@ form button {
 
 /* navbar */
 nav {
-	position: sticky;
+	position: relative;
 	display: flex;
 	align-items: center;
 	height: 56px;
@@ -122,11 +122,12 @@ nav a {
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
-	height: 200px;
+	padding: 20px 10px;
 	font-size: 18px;
 	font-weight: bold;
 	color: #1378bd;
 }
+
 .welcome-img {
 	margin-right: 10px;
 	width: 35%;
@@ -134,7 +135,7 @@ nav a {
 }
 
 .patronage-name {
-	margin: 5px;
+	margin: 8px;
 	font-size: 24px;
 	text-align: center;
 }
@@ -192,7 +193,7 @@ nav a {
 
 	/* home page */
 	.welcome-card {
-		height: 300px;
+		padding: 30px;
 		font-size: 24px;
 		text-align: center;
 	}
@@ -203,7 +204,12 @@ nav a {
 		align-items: center;
 	}
 
+	.welcome-img {
+		margin-right: 0;
+	}
+
 	.patronage-name {
+		margin: 0;
 		font-size: 36px;
 	}
 }
