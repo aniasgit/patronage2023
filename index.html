@@ -8,7 +8,10 @@
     <title>Zadanie kwalifikacyjne intive Patronage 2023</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap');
+    </style>
     <link rel="stylesheet" href="./css/style.css">
 </head>
 
@@ -35,26 +38,37 @@
             </div>
         </section>
         <section class="hide" id="login">
-            <div class="card form-card">
-                <form id="login-form">
-                    <h1>Logowanie</h1>
-                    <div>
-                        <label for="login-user-name-or-email">Email lub nazwa użytkownika:</label>
-                        <input id="login-user-name-or-email">
+            <div class="form-container">
+                <div class="card form-card">
+                    <form id="login-form" method="dialog">
+                        <h1>Logowanie</h1>
+                        <div>
+                            <label for="login-user-name-or-email">Email lub nazwa użytkownika:</label>
+                            <input id="login-user-name-or-email">
+                        </div>
+                        <p id="login-user-name-validation-msg" class="validation-msg hide">Błedy walidacji</p>
+                        <div>
+                            <label for="login-password">Hasło:</label>
+                            <input id="login-password" type="password">
+                        </div>
+                        <p id="login-password-validation-msg" class="validation-msg hide">Błedy walidacji</p>
+                        <button id="login-btn" class="btn primary-btn">Zaloguj</button>
+                    </form>
+                </div>
+            </div>
+            <div class="dialog hide">
+                <div class=" card">
+                    <p>Nie ma takiego użytkownika</p>
+                    <div class="button-container">
+                        <button id="cancel" class="btn">Anuluj</button>
+                        <button id="register" class="btn primary-btn">Zarejestruj</button>
                     </div>
-                    <p id="login-user-name-validation-msg" class="validation-msg hide">Błedy walidacji</p>
-                    <div>
-                        <label for="login-password">Hasło:</label>
-                        <input id="login-password" type="password">
-                    </div>
-                    <p id="login-password-validation-msg" class="validation-msg hide">Błedy walidacji</p>
-                    <button id="login-btn" class="btn primary-btn">Zaloguj</button>
-                </form>
+                </div>
             </div>
         </section>
         <section class="hide" id="register">
             <div class="card ">
-                <form id="register-form">
+                <form id="register-form" method="dialog">
                     <h1>Rejestracja</h1>
                     <div>
                         <label for="registration-user-name">Nazwa użytkownika:</label>

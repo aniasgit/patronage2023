@@ -19,6 +19,7 @@ main {
 /*  shared */
 section {
 	display: flex;
+	flex-direction: column;
 	justify-content: center;
 	align-items: center;
 	height: 100%;
@@ -42,6 +43,8 @@ section {
 .btn {
 	padding: 10px;
 	background-color: whitesmoke;
+	font-family: "Open Sans", sans-serif;
+	font-size: 18px;
 	border: 1px solid darkgray;
 	border-radius: 8px;
 }
@@ -49,11 +52,7 @@ section {
 .primary-btn {
 	background-color: #1378bd;
 	color: white;
-	border: none;
-}
-
-.hide {
-	display: none;
+	border: 1px solid #1378bd;
 }
 
 /* forms */
@@ -140,6 +139,52 @@ nav a {
 	text-align: center;
 }
 
+/* Popup */
+.dialog {
+	position: absolute;
+	top: 0;
+	left: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 100%;
+	width: 100%;
+	background-color: rgba(19, 120, 189, 0.3);
+}
+
+.dialog .card {
+	padding: 20px 10px;
+	width: 280px;
+	color: #1378bd;
+	text-align: center;
+	font-weight: bold;
+	font-size: 18px;
+}
+
+.dialog .button-container .btn {
+	margin-top: 20px;
+	margin-left: 10px;
+	margin-right: 10px;
+	padding: 5px;
+	font-size: 16px;
+	width: 104px;
+}
+
+.form-container {
+	/* position: relative; */
+	top: 0;
+	left: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 100%;
+	width: 100%;
+}
+
+.hide {
+	display: none;
+}
+
 @media (min-width: 768px) {
 	.card {
 		width: 700px;
@@ -211,5 +256,16 @@ nav a {
 	.patronage-name {
 		margin: 0;
 		font-size: 36px;
+	}
+
+	.dialog .card {
+		padding: 30px 20px;
+		width: 640px;
+	}
+
+	.dialog .button-container .btn {
+		padding: 5px;
+		font-size: 18px;
+		width: 136px;
 	}
 }

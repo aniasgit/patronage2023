@@ -27,6 +27,12 @@ const loginUserNameMsg = document.querySelector(
 const loginPasswordMsg = document.querySelector(
 	"#login-password-validation-msg"
 );
+const registerDialog = document.querySelector("#login .dialog");
+console.log(registerDialog);
+const registerDialogText = registerDialog.querySelector("p");
+console.log(registerDialogText);
+const registerDialogCancelBtn = registerDialog.querySelector("#cancel");
+const registerDialogRegisterBtn = registerDialog.querySelector("#register");
 
 // Registration variables
 let registerForm = document.querySelector("#register-form");
@@ -110,6 +116,7 @@ const locationHandler = () => {
 
 // Message setting
 const setMessage = (messageComponent, message) => {
+	console.log("ustawianie wiadomosci " + message + " w " + messageComponent);
 	messageComponent.textContent = message;
 	messageComponent.classList.remove("hide");
 };
@@ -125,7 +132,10 @@ const validateRegistrationUserName = () => {
 	const max = 16;
 
 	if (registrationUserName.value === "") {
-		setMessage(registrationUserNameMsg, "Nazwa użytkownika nie może być pusta");
+		setMessage(
+			registrationUserNameMsg,
+			"Nazwa użytkownika nie może być pusta."
+		);
 	} else if (registrationUserName.value.length < min) {
 		setMessage(
 			registrationUserNameMsg,
@@ -140,6 +150,11 @@ const validateRegistrationUserName = () => {
 		setMessage(
 			registrationUserNameMsg,
 			"Nazwa użytkownika może składać się tylko z liter lub cyfr."
+		);
+	} else if (isExistInLocalStorage(registrationUserName.value)) {
+		setMessage(
+			registrationUserNameMsg,
+			"Ta nazwa użytkownika jest już zajęta."
 		);
 	} else {
 		clearMessage(registrationUserNameMsg);
@@ -167,14 +182,16 @@ const validateRegistrationEmail = () => {
 	if (registrationEmail.value === "") {
 		setMessage(registrationEmailMsg, "Email nie może być pusty.");
 	} else if (
-		registrationEmail.value.match(
+		!registrationEmail.value.match(
 			/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 		)
 	) {
+		setMessage(registrationEmailMsg, "Nieprawidłowy format email.");
+	} else if (isExistInLocalStorage(registrationEmail.value)) {
+		setMessage(registrationEmailMsg, "Ten adres email jest już zajęty");
+	} else {
 		clearMessage(registrationEmailMsg);
 		return true;
-	} else {
-		setMessage(registrationEmailMsg, "Nieprawidłowy format email.");
 	}
 
 	return false;
@@ -207,7 +224,14 @@ const validateLoginEmailorUserName = () => {
 		);
 	} else if (!isExistInLocalStorage(loginUserNameEmail.value)) {
 		setMessage(loginUserNameMsg, "Taki użytkownik nie istnieje.");
-		// Dorób propozycje rejestracji
+		if (
+			loginUserNameEmail.value.match(
+				/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+			)
+		) {
+			registerDialog.classList.remove("hide");
+			registerDialogText.textContent = `Na adres email ${loginUserNameEmail.value} nie ma zarejestrowanego żadnego użytkownika. Czy chcesz zarejestrować nowego użytkownika na ten adres?`;
+		}
 	} else {
 		clearMessage(loginUserNameMsg);
 		return true;
@@ -261,6 +285,17 @@ const clearForm = (form) => {
 	);
 };
 
+const cancelRegisterDialog = () => {
+	registerDialog.classList.add("hide");
+};
+
+const goToRegistration = () => {
+	registerDialog.classList.add("hide");
+	registrationEmail.value = loginUserNameEmail.value;
+	window.location.href = "#register";
+	clearForm(loginForm);
+};
+
 const handleRegisterBtn = () => {
 	const validation = [];
 	validation.push(validateRegistrationUserName());
@@ -268,22 +303,7 @@ const handleRegisterBtn = () => {
 	validation.push(validateRegistrationEmail());
 	validation.push(validateRegistrationConfirmEmail());
 
-	if (isExistInLocalStorage(registrationEmail.value)) {
-		setMessage(registrationEmailMsg, "Ten adres email jest już zajęty");
-		validation.push(false);
-	} else {
-		clearMessage(registrationEmailMsg);
-	}
-
-	if (isExistInLocalStorage(registrationUserName.value)) {
-		setMessage(
-			registrationUserNameMsg,
-			"Ta nazwa użytkownika jest już zajęta."
-		);
-		validation.push(false);
-	} else {
-		clearMessage(registrationUserNameMsg);
-	}
+	console.log(validation);
 
 	if (!validation.includes(false)) {
 		const newUser = {
@@ -332,3 +352,5 @@ window.addEventListener("load", locationHandler);
 registerBtn.addEventListener("click", handleRegisterBtn);
 loginBtn.addEventListener("click", handleLoginBtn);
 logoutLink.addEventListener("click", logout);
+registerDialogRegisterBtn.addEventListener("click", goToRegistration);
+registerDialogCancelBtn.addEventListener("click", cancelRegisterDialog);
