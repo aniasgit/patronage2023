@@ -1,3 +1,5 @@
+//import { transactions, transactionTypes } from "../data";
+
 const contents = document.querySelectorAll("section");
 const routes = [];
 contents.forEach((content) => routes.push(content.id));
@@ -28,9 +30,7 @@ const loginPasswordMsg = document.querySelector(
 	"#login-password-validation-msg"
 );
 const registerDialog = document.querySelector("#login .dialog");
-console.log(registerDialog);
 const registerDialogText = registerDialog.querySelector("p");
-console.log(registerDialogText);
 const registerDialogCancelBtn = registerDialog.querySelector("#cancel");
 const registerDialogRegisterBtn = registerDialog.querySelector("#register");
 
@@ -55,6 +55,10 @@ const registrationEmailMsg = document.querySelector(
 const registrationConfirmEmailMsg = document.querySelector(
 	"#registration-confirm-email-validation-msg"
 );
+
+//user view variables
+let chart1 = document.querySelector("#chart1");
+let chart2 = document.querySelector("#chart2");
 
 // Setting views
 const setContent = (id) => {
@@ -346,11 +350,19 @@ const handleLoginBtn = () => {
 	}
 };
 
+// user View
+
+// const createDesktopTableRow = (data) => {
+
+// }
+
 window.addEventListener("hashchange", locationHandler);
 window.addEventListener("load", locationHandler);
 
 registerBtn.addEventListener("click", handleRegisterBtn);
 loginBtn.addEventListener("click", handleLoginBtn);
 logoutLink.addEventListener("click", logout);
+loginLink.addEventListener("click", () => clearForm(registerForm));
+registerLink.addEventListener("click", () => clearForm(loginForm));
 registerDialogRegisterBtn.addEventListener("click", goToRegistration);
 registerDialogCancelBtn.addEventListener("click", cancelRegisterDialog);

@@ -5,19 +5,26 @@
 }
 
 body {
+	position: relative;
 	display: flex;
 	flex-direction: column;
+	width: 100vw;
 	height: 100vh;
+
 	font-family: "Open Sans", sans-serif;
 	background-color: whitesmoke;
 }
 
 main {
-	height: 100%;
+	height: 92%;
+	width: 100%;
+	position: fixed;
+	top: 8%;
 }
 
 /*  shared */
 section {
+	position: relative;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
@@ -55,14 +62,62 @@ section {
 	border: 1px solid #1378bd;
 }
 
+/* navbar */
+nav {
+	position: sticky;
+	top: 0;
+	display: flex;
+	align-items: center;
+	height: 8%;
+	width: 100%;
+	background-color: #1378bd;
+	color: white;
+}
+
+.nav-logged {
+	position: absolute;
+	right: 0;
+}
+
+nav a {
+	padding: 0 20px;
+	text-decoration: none;
+	color: white;
+	font-size: 16px;
+}
+
+/* home page */
+.welcome-card {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	padding: 20px 15px;
+	font-size: 16px;
+	font-weight: bold;
+	color: #1378bd;
+	text-align: center;
+}
+
+.welcome-img {
+	width: 35%;
+	float: left;
+}
+
+.patronage-name {
+	margin: 8px;
+	font-size: 20px;
+	text-align: center;
+}
+
 /* forms */
 form {
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
 	align-items: left;
-	padding: 20px;
-	font-size: 18px;
+	padding: 20px 10px;
+	font-size: 16px;
 	color: #1378bd;
 }
 
@@ -93,53 +148,7 @@ form button {
 	color: red;
 }
 
-/* navbar */
-nav {
-	position: relative;
-	display: flex;
-	align-items: center;
-	height: 56px;
-	background-color: #1378bd;
-	color: white;
-}
-
-.nav-logged {
-	position: absolute;
-	right: 0;
-}
-
-nav a {
-	padding: 0 20px;
-	text-decoration: none;
-	color: white;
-	font-size: 16px;
-}
-
-/* home page */
-.welcome-card {
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-	padding: 20px 10px;
-	font-size: 18px;
-	font-weight: bold;
-	color: #1378bd;
-}
-
-.welcome-img {
-	margin-right: 10px;
-	width: 35%;
-	float: left;
-}
-
-.patronage-name {
-	margin: 8px;
-	font-size: 24px;
-	text-align: center;
-}
-
-/* Popup */
+/* Login form dialog */
 .dialog {
 	position: absolute;
 	top: 0;
@@ -181,59 +190,100 @@ nav a {
 	width: 100%;
 }
 
+/* user view */
+section#user {
+	justify-content: flex-start;
+}
+
+.charts {
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+	height: 50%;
+	width: 100%;
+	overflow-x: auto;
+}
+
+.chart {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin: auto 5%;
+	padding: 16px;
+	height: 90%;
+	min-width: 90%;
+	background-color: #1378bd;
+}
+
+.transactions {
+	height: 50%;
+	width: 100%;
+	overflow-y: scroll;
+}
+
+.transactions table {
+	width: 100%;
+	border-spacing: 0;
+}
+
+.transactions td {
+	padding: 4px;
+	border-bottom: 1px solid #1378bd;
+	font-size: 12px;
+}
+
+.transactions th {
+	border-bottom: thick double #1378bd;
+	color: #1378bd;
+	font-size: 20px;
+}
+
+.transactions .date {
+	display: none;
+}
+
+.transactions .type {
+	width: 10%;
+	font-size: 24px;
+	text-align: center;
+	color: rgb(15, 92, 143);
+}
+
+.transactions .description {
+	width: 55%;
+}
+
+.transactions .amount {
+	padding-right: 2px;
+	width: 35%;
+	text-align: right;
+}
+
+.transactions .balance {
+	display: none;
+}
+
+.fa-arrow-right-to-bracket {
+	transform: rotate(90deg);
+}
+
 .hide {
 	display: none;
 }
 
 @media (min-width: 768px) {
+	main {
+		height: 93%;
+		top: 7%;
+	}
+
 	.card {
 		width: 700px;
 	}
 
-	/* form */
-
-	form {
-		padding: 30px;
-	}
-
-	form div {
-		display: flex;
-		flex-direction: row;
-		align-items: center;
-	}
-
-	form input {
-		margin: 8px 0;
-		width: 70%;
-	}
-
-	form label {
-		display: inline;
-		padding-right: 8px;
-		margin-top: 0px;
-		width: 30%;
-		font-weight: bold;
-		text-align: right;
-	}
-
-	.validation-msg {
-		width: 70%;
-		margin: 0 0 0 auto;
-	}
-
-	/* login form */
-
-	#login form input {
-		width: 58%;
-	}
-
-	#login form label {
-		width: 42%;
-	}
-
-	#login .validation-msg {
-		width: 58%;
-		margin: 0 0 0 auto;
+	/* navbar */
+	nav {
+		height: 7%;
 	}
 
 	/* home page */
@@ -258,6 +308,52 @@ nav a {
 		font-size: 36px;
 	}
 
+	/* form */
+
+	form {
+		padding: 25px;
+	}
+
+	form div {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+	}
+
+	form input {
+		margin: 8px 0;
+		width: 68%;
+	}
+
+	form label {
+		display: inline;
+		padding-right: 8px;
+		margin-top: 0px;
+		width: 32%;
+		font-weight: bold;
+		text-align: right;
+	}
+
+	.validation-msg {
+		width: 68%;
+		margin: 0 0 0 auto;
+	}
+
+	/* login form */
+
+	#login form input {
+		width: 55%;
+	}
+
+	#login form label {
+		width: 45%;
+	}
+
+	#login .validation-msg {
+		width: 55%;
+		margin: 0 0 0 auto;
+	}
+
 	.dialog .card {
 		padding: 30px 20px;
 		width: 640px;
@@ -267,5 +363,33 @@ nav a {
 		padding: 5px;
 		font-size: 18px;
 		width: 136px;
+	}
+
+	/* user view */
+	.charts {
+		justify-content: space-between;
+		max-width: 1200px;
+	}
+
+	.chart {
+		margin: 0;
+		height: 90%;
+		min-width: 45%;
+	}
+
+	.transactions {
+		max-width: 1200px;
+	}
+
+	.transactions .date {
+		display: flex;
+	}
+
+	.transactions .balance {
+		display: flex;
+	}
+
+	.transactions .mobile-date {
+		display: none;
 	}
 }
