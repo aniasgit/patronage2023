@@ -1,62 +1,33 @@
-//import { transactions, transactionTypes } from "../data";
-const transactions = [
-	{
-		date: "2022-11-12",
-		type: 2,
-		amount: -231.56,
-		balance: 4337.25,
-		description: "Biedronka 13",
-	},
-	{
-		date: "2022-11-12",
-		type: 4,
-		amount: -31.56,
-		balance: 4572.18,
-		description: "PayU Spółka Akcyjna",
-	},
-	{
-		date: "2022-11-12",
-		type: 3,
-		amount: 2137.69,
-		balance: 2420.47,
-		description: "Wynagrodzenie z tytułu Umowy o Pracę",
-	},
-	{
-		date: "2022-11-10",
-		type: 2,
-		amount: -136,
-		balance: 2555.55,
-		description: "Lidl",
-	},
-	{
-		date: "2022-11-10",
-		type: 1,
-		amount: 25,
-		balance: 2847.66,
-		description: "Zrzutka na prezent dla Grażyny",
-	},
-	{
-		date: "2022-11-09",
-		type: 2,
-		amount: -111.11,
-		balance: 3000,
-		description: "Biedronka 13",
-	},
-	{
-		date: "2022-11-09",
-		type: 4,
-		amount: -78.33,
-		balance: 3027.51,
-		description: "PayU Spółka Akcyjna",
-	},
-];
+let mockTransactions = [];
+let mockTransactionTypes = [];
+let transactionTypes = {};
+let transactionsData = [];
 
-const transacationTypes = {
-	1: "Wpływy - inne",
-	2: "Wydatki - zakupy",
-	3: "Wpływy - wynagrodzenie",
-	4: "Wydatki - inne",
+const fetchMockData = async () => {
+	try {
+		const res = await fetch("../data.json");
+		const data = await res.json();
+		return data;
+	} catch (error) {
+		console.error(error);
+	}
 };
+
+const setMockData = async () => {
+	mockTransactions = [];
+	mockTransactionTypes = [];
+	try {
+		const mockDataArr = await fetchMockData();
+		mockDataArr.forEach((mockData) => {
+			mockTransactions.push(mockData.transactions);
+			mockTransactionTypes.push(mockData.transacationTypes);
+		});
+	} catch (error) {
+		console.error(error);
+	}
+};
+
+setMockData();
 
 const contents = document.querySelectorAll("section");
 const routes = [];
@@ -71,10 +42,6 @@ const registerLink = document.querySelector("#register-link");
 
 const loggedUserId = localStorage.getItem("logged");
 let loggedUser = JSON.parse(localStorage.getItem(loggedUserId));
-if (loggedUserId !== null) {
-	userNameSpan.textContent = loggedUser.userName;
-	window.location.href = "#user";
-}
 
 // Login variables
 let loginForm = document.querySelector("#login-form");
@@ -178,6 +145,8 @@ const setNavbar = (id) => {
 const setView = (id) => {
 	if (!routes.includes(id) || (id === "user" && loggedUser === null)) {
 		window.location.href = "#page-not-found";
+	} else if (id === "user") {
+		setUserData();
 	}
 
 	setContent(id);
@@ -188,6 +157,11 @@ const locationHandler = () => {
 	let location = window.location.hash.replace("#", "");
 	if (location === "") {
 		location = "home";
+	}
+
+	if (loggedUser !== null && location === "home") {
+		userNameSpan.textContent = loggedUser.userName;
+		location = "user";
 	}
 
 	if (!registerDialog.classList.contains("hide")) {
@@ -349,17 +323,27 @@ const checkLoginPassword = (userId) => {
 
 	return password === loginPassword.value;
 };
+
 const login = (userId) => {
 	localStorage.setItem("logged", userId);
 	loggedUser = JSON.parse(localStorage.getItem(userId));
 	userNameSpan.textContent = loggedUser.userName;
+
 	window.location.href = "#user";
 };
 
 const logout = () => {
-	localStorage.removeItem("logged");
 	loggedUser = null;
+	localStorage.removeItem("logged");
 	userNameSpan.textContent = "";
+	transactionsData = [];
+	transactionTypes = {};
+	while (tableData.firstChild) {
+		tableData.removeChild(element.firstChild);
+	}
+	console.log(transactionsData);
+	console.log(tableData);
+	window.location.href = "#";
 };
 
 const clearForm = (form) => {
@@ -377,10 +361,8 @@ const closeDialog = (dialog) => {
 };
 
 const goToRegistration = () => {
-	registerDialog.classList.add("hide");
 	registrationEmail.value = loginUserNameEmail.value;
 	window.location.href = "#register";
-	clearForm(loginForm);
 };
 
 const handleRegisterBtn = () => {
@@ -395,12 +377,19 @@ const handleRegisterBtn = () => {
 			userName: registrationUserName.value,
 			email: registrationEmail.value,
 			password: registrationPassword.value,
+			dataId: "",
 		};
+
+		if (window.localStorage.length > 0) {
+			newUser.dataId = 1;
+			//newUser.dataId = Math.round(Math.random() * mockTransactions.length);
+		} else {
+			newUser.dataId = -1;
+		}
 
 		localStorage.setItem(newUser.email, JSON.stringify(newUser));
 		localStorage.setItem(newUser.userName, newUser.email);
 		login(newUser.email);
-		clearForm(registerForm);
 	}
 };
 
@@ -424,10 +413,46 @@ const handleLoginBtn = () => {
 
 		if (checkLoginPassword(userId)) {
 			login(userId);
-			clearForm(loginForm);
 		} else {
 			setMessage(loginPasswordMsg, "Hasło jest nieprawidłowe.");
 		}
+	}
+};
+// user data
+const fetchUserData = async () => {
+	try {
+		const res = await fetch("https://api.npoint.io/38edf0c5f3eb9ac768bd");
+		const data = await res.json();
+		return data;
+	} catch (error) {
+		console.error(error);
+	}
+};
+
+const setUserData = async () => {
+	if (loggedUser.dataId < 0) {
+		try {
+			const data = await fetchUserData();
+			transactionsData = data.transactions;
+			transactionTypes = data.transacationTypes;
+		} catch (error) {
+			console.error(error);
+		}
+	} else {
+		transactionsData = mockTransactions[loggedUser.dataId];
+		transactionTypes = mockTransactionTypes[loggedUser.dataId];
+	}
+
+	if (transactionsData.length > 0) {
+		createTableData(transactionsData);
+		userViewMessage.classList.add("hide");
+		userCharts.classList.remove("hide");
+		tableData.classList.remove("hide");
+	} else {
+		userViewMessage.textContent = `Użytkownik ${loggedUser.userName} nie ma jeszcze żadnych transakcji.`;
+		userViewMessage.classList.remove("hide");
+		userCharts.classList.add("hide");
+		tableData.classList.add("hide");
 	}
 };
 
@@ -454,7 +479,7 @@ const createTransactionCell = (transactionProperty, transaction) => {
 	} else if (transactionProperty === "type") {
 		const icon = document.createElement("i");
 		icon.classList.add("fa-solid");
-		const type = transacationTypes[transaction[transactionProperty]];
+		const type = transactionTypes[transaction[transactionProperty]];
 		switch (type) {
 			case "Wpływy - inne":
 				icon.classList.add("fa-arrow-right-to-bracket");
@@ -483,7 +508,7 @@ const createTransactionCell = (transactionProperty, transaction) => {
 		descriptionP.textContent = transaction[transactionProperty];
 		const descriptionTypeP = document.createElement("p");
 		descriptionTypeP.classList.add("description-type");
-		descriptionTypeP.textContent = transacationTypes[transaction.type];
+		descriptionTypeP.textContent = transactionTypes[transaction.type];
 
 		transactionCell.appendChild(descriptionP);
 		transactionCell.appendChild(descriptionTypeP);
@@ -541,8 +566,6 @@ const createTableData = (transactions) => {
 };
 
 const showTransactionDetails = (row) => {
-	console.log(row);
-
 	transactionDetailsDialogDate.textContent =
 		row.querySelector("td.date").textContent;
 	transactionDetailsDialogDescription.textContent =
@@ -551,22 +574,18 @@ const showTransactionDetails = (row) => {
 		row.querySelector("td.amount").textContent;
 	transactionDetailsDialogBalance.textContent =
 		row.querySelector("td.balance").textContent;
-
-	transactionDetailsDialog.classList.remove("hide");
-	console.log(row.querySelector("td.type i").className);
 	transactionDetailsDialogTypeIcon.className =
 		row.querySelector("td.type i").className;
 	transactionDetailsDialogType.textContent = row.querySelector(
 		"td.description .description-type"
 	).textContent;
+
+	transactionDetailsDialog.classList.remove("hide");
 };
 
 window.addEventListener("hashchange", locationHandler);
-window.addEventListener("load", locationHandler);
-
-document.addEventListener("DOMContentLoaded", () => {
-	createTableData(transactions);
-});
+//window.addEventListener("load", locationHandler);
+window.addEventListener("DOMContentLoaded", locationHandler);
 
 registerBtn.addEventListener("click", handleRegisterBtn);
 loginBtn.addEventListener("click", handleLoginBtn);
