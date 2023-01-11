@@ -24,7 +24,7 @@
             <a href="#user">użytkownik</a>
         </div>
         <div class="nav-logged hide">
-            <span>Nazwa użytkownika</span>
+            <span></span>
             <a id="logout-link" href="#">Wyloguj</a>
         </div>
     </nav>
@@ -103,41 +103,55 @@
             </div>
             <div class="transactions">
                 <table>
-                    <tr>
-                        <th class="mobile-date" colspan="5">09.01.2022</th>
-                    </tr>
-                    <tr>
-                        <td class="date">data</td>
-                        <td class="type">
-                            <i class="fa-solid fa-cart-shopping"></i>
-                        </td>
-                        <td class="description">Biedronka 13</td>
-                        <td class="amount">-111.11 PLN</td>
-                        <td class="balance">saldo</td>
-                    </tr>
-                    <tr>
-                        <td class="date">data</td>
-                        <td class="type"><i class="fa-solid fa-money-bills"></i></td>
-                        <td class="description">Wynagrodzenie z tytułu Umowy o Pracę</td>
-                        <td class="amount">2137.69 PLN</td>
-                        <td class="balance">saldo</td>
-                    </tr>
-                    <tr>
-                        <td class="date">data</td>
-                        <td class="type"><i class="fa-solid fa-arrow-right-to-bracket"></i></td>
-                        <td class="description">Zrzutka na prezent dla Grażyny</td>
-                        <td class="amount">25 PLN</td>
-                        <td class="balance">saldo</td>
-                    </tr>
-                    <tr>
-                        <td class="date">data</td>
-                        <td class="type"><i class="fa-solid fa-arrow-up-from-bracket"></i></td>
-                        <td class="description">PayU Spółka Akcyjna</td>
-                        <td class="amount">-78.33 PLN</td>
-                        <td class="balance">saldo</td>
-                    </tr>
+                    <thead>
+                        <td class="date">Data</td>
+                        <td class="type">Typ</td>
+                        <td class="description">Opis</td>
+                        <td class="amount">Kwota</td>
+                        <td class="balance">Saldo</td>
+                    </thead>
+                    <tbody>
+                    </tbody>
 
                 </table>
+            </div>
+            <div class="dialog hide">
+                <div class="card transaction-details-card">
+                    <div class="transaction-details-header">
+                        <div class="btn-container">
+                            <button class="exit-btn">
+                                <i class="fa-solid fa-xmark"></i>
+                            </button>
+                        </div>
+                        <h3>szczegóły transakcji</h3>
+                    </div>
+
+                    <div class="transaction-details">
+                        <div class="detail">
+                            <label for="transaction-date">Data transakcji:</label>
+                            <p id="transaction-date">30.01.2023</p>
+                        </div>
+                        <div class="detail">
+                            <label for="transaction-type">Typ transakcji:</label>
+                            <div>
+                                <i id="transaction-type-icon" class="fa-solid fa-cart-shopping"></i>
+                                <span id="transaction-type">Wydatki zakupy</span>
+                            </div>
+                        </div>
+                        <div class="detail">
+                            <label for="transaction-description">Opis:</label>
+                            <p id="transaction-description">Biedronka 13</p>
+                        </div>
+                        <div class="detail">
+                            <label for="transaction-amount">Kwota:</label>
+                            <p id="transaction-amount">-25,70 PLN</p>
+                        </div>
+                        <div class="detail">
+                            <label for="transaction-balance">Saldo:</label>
+                            <p id="transaction-balance">3000 PLN</p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
         <section id="page-not-found" class="hide">

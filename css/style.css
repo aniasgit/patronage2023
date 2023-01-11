@@ -195,6 +195,10 @@ section#user {
 	justify-content: flex-start;
 }
 
+section#user h1 {
+	text-align: center;
+}
+
 .charts {
 	display: flex;
 	justify-content: flex-start;
@@ -223,7 +227,12 @@ section#user {
 
 .transactions table {
 	width: 100%;
+	padding: 4px;
 	border-spacing: 0;
+}
+
+.transactions thead {
+	display: none;
 }
 
 .transactions td {
@@ -267,11 +276,73 @@ section#user {
 	transform: rotate(90deg);
 }
 
+.description-type {
+	display: none;
+}
+
+.dialog .transaction-details-card {
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: center;
+	width: 95%;
+	max-height: 95%;
+	overflow-y: scroll;
+}
+
+.transaction-details-header {
+	width: 100%;
+}
+
+.transaction-details-header .btn-container {
+	display: flex;
+	justify-content: flex-end;
+	align-items: flex-start;
+}
+.transaction-details-header button {
+	width: 36px;
+	height: 36px;
+	font-size: 24px;
+	color: #1378bd;
+	background: none;
+	border: none;
+}
+
+.transaction-details-header h3 {
+	padding: 1vh 0;
+	border-bottom: thick double #1378bd;
+	text-transform: uppercase;
+}
+
+.transaction-details {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: flex-start;
+	padding: 20px;
+	width: 100%;
+}
+
+.transaction-details p,
+.transaction-details span {
+	font-weight: normal;
+	color: black;
+}
+
+.transaction-details label {
+	padding: 8px 0;
+}
+
+.detail {
+	margin: 8px 0;
+	text-align: left;
+}
+
 .hide {
 	display: none;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 769px) {
 	main {
 		height: 93%;
 		top: 7%;
@@ -381,15 +452,51 @@ section#user {
 		max-width: 1200px;
 	}
 
+	.transactions td {
+		padding: 8px 16px;
+		font-size: 16px;
+	}
+
 	.transactions .date {
-		display: flex;
+		display: table-cell;
+		width: 10%;
+	}
+
+	.transactions .description {
+		width: 40%;
+	}
+
+	.transactions .amount {
+		width: 20%;
 	}
 
 	.transactions .balance {
-		display: flex;
+		display: table-cell;
+		width: 20%;
+		text-align: right;
 	}
 
 	.transactions .mobile-date {
 		display: none;
+	}
+
+	.transactions thead {
+		display: table-header-group;
+	}
+
+	.transactions thead td {
+		font-size: 18px;
+		font-weight: bold;
+		color: rgb(15, 92, 143);
+	}
+
+	.transactions thead .type {
+		font-size: 18px;
+		text-align: center;
+	}
+
+	.description-type {
+		display: flex;
+		font-size: 12px;
 	}
 }

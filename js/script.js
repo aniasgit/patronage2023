@@ -1,4 +1,62 @@
 //import { transactions, transactionTypes } from "../data";
+const transactions = [
+	{
+		date: "2022-11-12",
+		type: 2,
+		amount: -231.56,
+		balance: 4337.25,
+		description: "Biedronka 13",
+	},
+	{
+		date: "2022-11-12",
+		type: 4,
+		amount: -31.56,
+		balance: 4572.18,
+		description: "PayU Spółka Akcyjna",
+	},
+	{
+		date: "2022-11-12",
+		type: 3,
+		amount: 2137.69,
+		balance: 2420.47,
+		description: "Wynagrodzenie z tytułu Umowy o Pracę",
+	},
+	{
+		date: "2022-11-10",
+		type: 2,
+		amount: -136,
+		balance: 2555.55,
+		description: "Lidl",
+	},
+	{
+		date: "2022-11-10",
+		type: 1,
+		amount: 25,
+		balance: 2847.66,
+		description: "Zrzutka na prezent dla Grażyny",
+	},
+	{
+		date: "2022-11-09",
+		type: 2,
+		amount: -111.11,
+		balance: 3000,
+		description: "Biedronka 13",
+	},
+	{
+		date: "2022-11-09",
+		type: 4,
+		amount: -78.33,
+		balance: 3027.51,
+		description: "PayU Spółka Akcyjna",
+	},
+];
+
+const transacationTypes = {
+	1: "Wpływy - inne",
+	2: "Wydatki - zakupy",
+	3: "Wpływy - wynagrodzenie",
+	4: "Wydatki - inne",
+};
 
 const contents = document.querySelectorAll("section");
 const routes = [];
@@ -57,19 +115,36 @@ const registrationConfirmEmailMsg = document.querySelector(
 );
 
 //user view variables
+const userViewMessage = document.querySelector("#user h1");
+const userCharts = document.querySelector(".charts");
+const userTransactions = document.querySelector(".transactions");
 let chart1 = document.querySelector("#chart1");
 let chart2 = document.querySelector("#chart2");
+const tableData = document.querySelector(".transactions tbody");
+const transactionDetailsDialog = document.querySelector("section#user .dialog");
+const transactionDetailsDialogExitBtn =
+	transactionDetailsDialog.querySelector(".exit-btn");
+const transactionDetailsDialogDate =
+	transactionDetailsDialog.querySelector("#transaction-date");
+const transactionDetailsDialogDescription =
+	transactionDetailsDialog.querySelector("#transaction-description");
+const transactionDetailsDialogAmount = transactionDetailsDialog.querySelector(
+	"#transaction-amount"
+);
+const transactionDetailsDialogBalance = transactionDetailsDialog.querySelector(
+	"#transaction-balance"
+);
+const transactionDetailsDialogType =
+	transactionDetailsDialog.querySelector("#transaction-type");
+const transactionDetailsDialogTypeIcon = transactionDetailsDialog.querySelector(
+	"#transaction-type-icon"
+);
 
 // Setting views
 const setContent = (id) => {
 	contents.forEach((content) => {
 		if (content.id === id) {
-			if (id === "user" && loggedUser == null) {
-				// dopisać coś ładniejszego
-				console.log("brak zalogowanego użytkownika");
-			} else {
-				content.classList.remove("hide");
-			}
+			content.classList.remove("hide");
 		} else {
 			content.classList.add("hide");
 		}
@@ -101,8 +176,8 @@ const setNavbar = (id) => {
 };
 
 const setView = (id) => {
-	if (!routes.includes(id)) {
-		id = "page-not-found";
+	if (!routes.includes(id) || (id === "user" && loggedUser === null)) {
+		window.location.href = "#page-not-found";
 	}
 
 	setContent(id);
@@ -115,12 +190,20 @@ const locationHandler = () => {
 		location = "home";
 	}
 
+	if (!registerDialog.classList.contains("hide")) {
+		registerDialog.classList.add("hide");
+	} else {
+		clearForm(registerForm);
+	}
+
+	clearForm(loginForm);
+	transactionDetailsDialog.classList.add("hide");
+
 	setView(location);
 };
 
 // Message setting
 const setMessage = (messageComponent, message) => {
-	console.log("ustawianie wiadomosci " + message + " w " + messageComponent);
 	messageComponent.textContent = message;
 	messageComponent.classList.remove("hide");
 };
@@ -289,8 +372,8 @@ const clearForm = (form) => {
 	);
 };
 
-const cancelRegisterDialog = () => {
-	registerDialog.classList.add("hide");
+const closeDialog = (dialog) => {
+	dialog.classList.add("hide");
 };
 
 const goToRegistration = () => {
@@ -306,8 +389,6 @@ const handleRegisterBtn = () => {
 	validation.push(validateRegistrationPassword());
 	validation.push(validateRegistrationEmail());
 	validation.push(validateRegistrationConfirmEmail());
-
-	console.log(validation);
 
 	if (!validation.includes(false)) {
 		const newUser = {
@@ -351,18 +432,149 @@ const handleLoginBtn = () => {
 };
 
 // user View
+const removeDuplicates = (arr) => {
+	return [...new Set(arr)];
+};
 
-// const createDesktopTableRow = (data) => {
+const formatDate = (date) => {
+	const dateObjc = new Date(date);
 
-// }
+	return dateObjc.toLocaleDateString("pl-PL", {
+		day: "2-digit",
+		month: "2-digit",
+		year: "numeric",
+	});
+};
+
+const createTransactionCell = (transactionProperty, transaction) => {
+	const transactionCell = document.createElement("td");
+	transactionCell.classList.add(transactionProperty);
+	if (transactionProperty === "date") {
+		transactionCell.textContent = formatDate(transaction[transactionProperty]);
+	} else if (transactionProperty === "type") {
+		const icon = document.createElement("i");
+		icon.classList.add("fa-solid");
+		const type = transacationTypes[transaction[transactionProperty]];
+		switch (type) {
+			case "Wpływy - inne":
+				icon.classList.add("fa-arrow-right-to-bracket");
+				break;
+			case "Wydatki - zakupy":
+				icon.classList.add("fa-cart-shopping");
+				break;
+			case "Wpływy - wynagrodzenie":
+				icon.classList.add("fa-money-bills");
+				break;
+			case "Wydatki - inne":
+				icon.classList.add("fa-arrow-up-from-bracket");
+				break;
+		}
+
+		transactionCell.appendChild(icon);
+	} else if (
+		transactionProperty === "amount" ||
+		transactionProperty === "balance"
+	) {
+		transactionCell.textContent = `${transaction[transactionProperty]
+			.toString()
+			.replace(".", ",")} PLN`;
+	} else if (transactionProperty === "description") {
+		const descriptionP = document.createElement("p");
+		descriptionP.textContent = transaction[transactionProperty];
+		const descriptionTypeP = document.createElement("p");
+		descriptionTypeP.classList.add("description-type");
+		descriptionTypeP.textContent = transacationTypes[transaction.type];
+
+		transactionCell.appendChild(descriptionP);
+		transactionCell.appendChild(descriptionTypeP);
+	}
+
+	return transactionCell;
+};
+
+const createTransactionRow = (transaction) => {
+	const transactionRow = document.createElement("tr");
+	transactionRow.classList.add("transaction-row");
+	const properties = ["date", "type", "description", "amount", "balance"];
+	const cells = [];
+	properties.forEach((property) =>
+		cells.push(createTransactionCell(property, transaction))
+	);
+
+	cells.forEach((cell) => transactionRow.appendChild(cell));
+
+	return transactionRow;
+};
+
+const createDateRow = (date) => {
+	const dateRow = document.createElement("tr");
+	const dateCell = document.createElement("th");
+	dateCell.classList.add("mobile-date");
+	dateCell.colSpan = "5";
+	dateCell.textContent = formatDate(date);
+	dateRow.appendChild(dateCell);
+
+	return dateRow;
+};
+
+const createTableData = (transactions) => {
+	let dates = transactions.map((transaction) => transaction.date);
+	dates = removeDuplicates(dates);
+	dates.sort().reverse();
+
+	dates.forEach((date) => {
+		tableData.appendChild(createDateRow(date));
+
+		transactions.forEach((transaction) => {
+			if (transaction.date === date) {
+				const index = transactions.indexOf(transaction);
+				const newRow = createTransactionRow(transaction);
+				newRow.addEventListener("click", () => {
+					if (window.innerWidth < 769) {
+						showTransactionDetails(newRow);
+					}
+				});
+				tableData.appendChild(newRow);
+			}
+		});
+	});
+};
+
+const showTransactionDetails = (row) => {
+	console.log(row);
+
+	transactionDetailsDialogDate.textContent =
+		row.querySelector("td.date").textContent;
+	transactionDetailsDialogDescription.textContent =
+		row.querySelector("td.description p").textContent;
+	transactionDetailsDialogAmount.textContent =
+		row.querySelector("td.amount").textContent;
+	transactionDetailsDialogBalance.textContent =
+		row.querySelector("td.balance").textContent;
+
+	transactionDetailsDialog.classList.remove("hide");
+	console.log(row.querySelector("td.type i").className);
+	transactionDetailsDialogTypeIcon.className =
+		row.querySelector("td.type i").className;
+	transactionDetailsDialogType.textContent = row.querySelector(
+		"td.description .description-type"
+	).textContent;
+};
 
 window.addEventListener("hashchange", locationHandler);
 window.addEventListener("load", locationHandler);
 
+document.addEventListener("DOMContentLoaded", () => {
+	createTableData(transactions);
+});
+
 registerBtn.addEventListener("click", handleRegisterBtn);
 loginBtn.addEventListener("click", handleLoginBtn);
 logoutLink.addEventListener("click", logout);
-loginLink.addEventListener("click", () => clearForm(registerForm));
-registerLink.addEventListener("click", () => clearForm(loginForm));
 registerDialogRegisterBtn.addEventListener("click", goToRegistration);
-registerDialogCancelBtn.addEventListener("click", cancelRegisterDialog);
+registerDialogCancelBtn.addEventListener("click", () =>
+	closeDialog(registerDialog)
+);
+transactionDetailsDialogExitBtn.addEventListener("click", () =>
+	closeDialog(transactionDetailsDialog)
+);
