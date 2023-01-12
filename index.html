@@ -97,8 +97,11 @@
         <section class="hide" id="user">
             <h1 class="hide">Brak transakcji</h1>
             <div class="charts">
-                <div id="chart1" class="chart">wykres1</div>
-                <div id="chart2" class="chart">wykres2</div>
+                <div class="chart-container">
+                    <h3>Transakcje według typów</h3>
+                    <canvas id="pie-chart"></canvas>
+                </div>
+                <div class="chart-container">wykres2</div>
             </div>
             <div class="transactions">
                 <table>
@@ -160,7 +163,15 @@
         </section>
     </main>
 
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.1.2/dist/chart.umd.min.js"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.1.2/chart.min.js"
+        integrity="sha512-fYE9wAJg2PYbpJPxyGcuzDSiMuWJiw58rKa9MWQICkAqEO+xeJ5hg5qPihF8kqa7tbgJxsmgY0Yp51+IMrSEVg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script> -->
+    <script type="text/javascript" src="js/mock-data.js"></script>
     <script type="text/javascript" src="js/script.js"></script>
+    <script>
+        setMockData(mockData);
+    </script>
 </body>
 
 </html>

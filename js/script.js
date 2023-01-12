@@ -3,31 +3,15 @@ let mockTransactionTypes = [];
 let transactionTypes = {};
 let transactionsData = [];
 
-const fetchMockData = async () => {
-	try {
-		const res = await fetch("../data.json");
-		const data = await res.json();
-		return data;
-	} catch (error) {
-		console.error(error);
-	}
-};
-
-const setMockData = async () => {
+const setMockData = (dataArr) => {
 	mockTransactions = [];
 	mockTransactionTypes = [];
-	try {
-		const mockDataArr = await fetchMockData();
-		mockDataArr.forEach((mockData) => {
-			mockTransactions.push(mockData.transactions);
-			mockTransactionTypes.push(mockData.transacationTypes);
-		});
-	} catch (error) {
-		console.error(error);
-	}
-};
 
-setMockData();
+	dataArr.forEach((data) => {
+		mockTransactions.push(data.transactions);
+		mockTransactionTypes.push(data.transacationTypes);
+	});
+};
 
 const contents = document.querySelectorAll("section");
 const routes = [];
@@ -85,8 +69,8 @@ const registrationConfirmEmailMsg = document.querySelector(
 const userViewMessage = document.querySelector("#user h1");
 const userCharts = document.querySelector(".charts");
 const userTransactions = document.querySelector(".transactions");
-let chart1 = document.querySelector("#chart1");
-let chart2 = document.querySelector("#chart2");
+const pieChart = document.querySelector("#pie-chart");
+const barChart = document.querySelector("#bar-chart");
 const tableData = document.querySelector(".transactions tbody");
 const transactionDetailsDialog = document.querySelector("section#user .dialog");
 const transactionDetailsDialogExitBtn =
@@ -339,10 +323,8 @@ const logout = () => {
 	transactionsData = [];
 	transactionTypes = {};
 	while (tableData.firstChild) {
-		tableData.removeChild(element.firstChild);
+		tableData.removeChild(tableData.firstChild);
 	}
-	console.log(transactionsData);
-	console.log(tableData);
 	window.location.href = "#";
 };
 
@@ -381,8 +363,8 @@ const handleRegisterBtn = () => {
 		};
 
 		if (window.localStorage.length > 0) {
-			newUser.dataId = 1;
-			//newUser.dataId = Math.round(Math.random() * mockTransactions.length);
+			console.log(mockTransactions.length);
+			newUser.dataId = Math.floor(Math.random() * mockTransactions.length);
 		} else {
 			newUser.dataId = -1;
 		}
@@ -444,15 +426,18 @@ const setUserData = async () => {
 	}
 
 	if (transactionsData.length > 0) {
+		const pieChartData = setPieChartData(transactionsData, transactionTypes);
+		const pieChartConfig = setPieChartConfig(pieChartData);
+		createChart(pieChart, pieChartConfig);
 		createTableData(transactionsData);
 		userViewMessage.classList.add("hide");
 		userCharts.classList.remove("hide");
-		tableData.classList.remove("hide");
+		userTransactions.classList.remove("hide");
 	} else {
 		userViewMessage.textContent = `Użytkownik ${loggedUser.userName} nie ma jeszcze żadnych transakcji.`;
 		userViewMessage.classList.remove("hide");
 		userCharts.classList.add("hide");
-		tableData.classList.add("hide");
+		userTransactions.classList.add("hide");
 	}
 };
 
@@ -583,8 +568,81 @@ const showTransactionDetails = (row) => {
 	transactionDetailsDialog.classList.remove("hide");
 };
 
+// charts
+const setPieChartData = (transactions, transacationTypes) => {
+	const types = [];
+	const typeLabels = [];
+
+	for (const [key, value] of Object.entries(transacationTypes)) {
+		types.push(parseInt(key));
+		typeLabels.push(value);
+	}
+
+	let data = types.map((type) => 0);
+	console.log(types);
+	console.log(typeLabels);
+	transactions.forEach((transaction) => {
+		const i = types.indexOf(transaction.type);
+		data[i]++;
+	});
+
+	return {
+		labels: typeLabels,
+		datasets: [
+			{
+				label: "Liczba transakcji",
+				data: data,
+				backgroundColor: [
+					"rgb(120, 222, 120)",
+					"rgb(255, 99, 132)",
+					"rgb(109, 200, 29)",
+					"rgb(255, 105, 86)",
+				],
+
+				hoverOffset: 4,
+			},
+		],
+	};
+};
+
+const setPieChartConfig = (data) => {
+	return {
+		type: "pie",
+		data: data,
+		options: {
+			layout: {
+				padding: 0,
+			},
+			aspectRatio: 2,
+			plugins: {
+				title: {
+					display: false,
+					text: "Transakcje według typów",
+					font: {
+						size: 20,
+					},
+				},
+				legend: {
+					display: true,
+					position: "right",
+					align: "center",
+					labels: {
+						boxWidth: 15,
+						font: {
+							size: 10,
+						},
+					},
+				},
+			},
+		},
+	};
+};
+
+const createChart = (canvas, config) => {
+	new Chart(canvas, config);
+};
+
 window.addEventListener("hashchange", locationHandler);
-//window.addEventListener("load", locationHandler);
 window.addEventListener("DOMContentLoaded", locationHandler);
 
 registerBtn.addEventListener("click", handleRegisterBtn);
