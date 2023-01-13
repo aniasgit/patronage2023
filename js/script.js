@@ -104,6 +104,7 @@ const setContent = (id) => {
 
 const setNavbar = (id) => {
 	if (id === "user") {
+		userNameSpan.textContent = loggedUser.userName;
 		navMain.classList.add("hide");
 		navLogged.classList.remove("hide");
 	} else {
@@ -144,7 +145,6 @@ const locationHandler = () => {
 	}
 
 	if (loggedUser !== null && location === "home") {
-		userNameSpan.textContent = loggedUser.userName;
 		location = "user";
 	}
 
@@ -311,7 +311,6 @@ const checkLoginPassword = (userId) => {
 const login = (userId) => {
 	localStorage.setItem("logged", userId);
 	loggedUser = JSON.parse(localStorage.getItem(userId));
-	userNameSpan.textContent = loggedUser.userName;
 
 	window.location.href = "#user";
 };
@@ -363,7 +362,6 @@ const handleRegisterBtn = () => {
 		};
 
 		if (window.localStorage.length > 0) {
-			console.log(mockTransactions.length);
 			newUser.dataId = Math.floor(Math.random() * mockTransactions.length);
 		} else {
 			newUser.dataId = -1;
@@ -428,7 +426,10 @@ const setUserData = async () => {
 	if (transactionsData.length > 0) {
 		const pieChartData = setPieChartData(transactionsData, transactionTypes);
 		const pieChartConfig = setPieChartConfig(pieChartData);
+		const barChartData = setBarChartData(transactionsData);
+		const barChartConfig = setBarChartConfig(barChartData);
 		createChart(pieChart, pieChartConfig);
+		createChart(barChart, barChartConfig);
 		createTableData(transactionsData);
 		userViewMessage.classList.add("hide");
 		userCharts.classList.remove("hide");
@@ -454,6 +455,14 @@ const formatDate = (date) => {
 		month: "2-digit",
 		year: "numeric",
 	});
+};
+
+const getDates = (transactions) => {
+	let dates = transactions.map((transaction) => transaction.date);
+	dates = removeDuplicates(dates);
+	dates.sort();
+
+	return dates;
 };
 
 const createTransactionCell = (transactionProperty, transaction) => {
@@ -528,9 +537,7 @@ const createDateRow = (date) => {
 };
 
 const createTableData = (transactions) => {
-	let dates = transactions.map((transaction) => transaction.date);
-	dates = removeDuplicates(dates);
-	dates.sort().reverse();
+	let dates = getDates(transactions).reverse();
 
 	dates.forEach((date) => {
 		tableData.appendChild(createDateRow(date));
@@ -579,8 +586,6 @@ const setPieChartData = (transactions, transacationTypes) => {
 	}
 
 	let data = types.map((type) => 0);
-	console.log(types);
-	console.log(typeLabels);
 	transactions.forEach((transaction) => {
 		const i = types.indexOf(transaction.type);
 		data[i]++;
@@ -594,9 +599,9 @@ const setPieChartData = (transactions, transacationTypes) => {
 				data: data,
 				backgroundColor: [
 					"rgb(120, 222, 120)",
-					"rgb(255, 99, 132)",
-					"rgb(109, 200, 29)",
 					"rgb(255, 105, 86)",
+					"rgb(109, 200, 29)",
+					"rgb(255, 99, 132)",
 				],
 
 				hoverOffset: 4,
@@ -611,7 +616,7 @@ const setPieChartConfig = (data) => {
 		data: data,
 		options: {
 			layout: {
-				padding: 0,
+				padding: 15,
 			},
 			aspectRatio: 2,
 			plugins: {
@@ -632,6 +637,82 @@ const setPieChartConfig = (data) => {
 							size: 10,
 						},
 					},
+				},
+			},
+		},
+	};
+};
+
+const setBarChartData = (transactions) => {
+	const dates = getDates(transactions);
+	const formatDates = dates.map((date) => formatDate(date));
+
+	dates.reverse();
+
+	let nextTransactionIndex = 0;
+	const balances = dates.map((date) => {
+		for (let i = nextTransactionIndex; i < transactions.length; i++) {
+			if (date === transactions[i].date) {
+				nextTransactionIndex = i + 1;
+				return transactions[i].balance;
+			}
+		}
+	});
+	balances.reverse();
+
+	const backgroundColors = balances.map((balance) => {
+		if (balance < 0) {
+			return "rgba(255, 99, 132, 0.2)";
+		} else if (balance > 0) {
+			return "rgba(75, 192, 192, 0.2)";
+		} else return "rgb(0, 0, 0)";
+	});
+
+	const borderColors = balances.map((balance) => {
+		if (balance < 0) {
+			return "rgb(255, 99, 132)";
+		} else if (balance > 0) {
+			return "rgb(75, 192, 192)";
+		} else return "rgb(0, 0, 0)";
+	});
+
+	return {
+		labels: formatDates,
+		datasets: [
+			{
+				label: "Saldo w PLN",
+				data: balances,
+				backgroundColor: backgroundColors,
+				borderColor: borderColors,
+				borderWidth: 1,
+			},
+		],
+	};
+};
+
+const setBarChartConfig = (data) => {
+	return {
+		type: "bar",
+		data: data,
+		options: {
+			scales: {
+				y: {
+					beginAtZero: true,
+					grid: {
+						color: function (context) {
+							if (context.tick.value === 0) {
+								return "#000000";
+							} else {
+								return Chart.defaults.borderColor;
+							}
+						},
+					},
+				},
+			},
+
+			plugins: {
+				legend: {
+					display: false,
 				},
 			},
 		},

@@ -13,6 +13,13 @@ const mockData = [
 			{
 				date: "2023-01-12",
 				type: 2,
+				amount: -2500,
+				balance: -67.56,
+				description: "Opłata za zakwaterowanie",
+			},
+			{
+				date: "2023-01-12",
+				type: 2,
 				amount: -231.56,
 				balance: 2432.44,
 				description: "Kaufland",
