@@ -120,3 +120,5 @@ const mockData = [
 		},
 	},
 ];
+
+setMockData(mockData);

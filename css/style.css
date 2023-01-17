@@ -44,7 +44,6 @@ section {
 .card h1 {
 	text-align: center;
 	margin-bottom: 16px;
-	text-shadow: 1px 1px 1px lightblue;
 }
 
 .btn {
@@ -191,6 +190,9 @@ form button {
 }
 
 /* user view */
+section#user {
+	justify-content: flex-start;
+}
 section#user h1 {
 	text-align: center;
 }
@@ -199,7 +201,8 @@ section#user h1 {
 	display: flex;
 	justify-content: flex-start;
 	align-items: center;
-	height: 50%;
+	height: 320px;
+	/* height: 50%; */
 	/* min-height: 660px; */
 	width: 100%;
 	overflow-x: auto;
@@ -210,7 +213,7 @@ section#user h1 {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	padding: 2% 0;
+	padding: 24px 0;
 	justify-content: center;
 	min-width: 100%;
 	max-width: 500px;
@@ -223,9 +226,9 @@ section#user h1 {
 }
 
 .transactions {
-	height: 50%;
+	/* height: 50%; */
 	width: 100%;
-	overflow-y: scroll;
+	overflow-y: auto;
 }
 
 .transactions table {
@@ -245,7 +248,7 @@ section#user h1 {
 }
 
 .transactions th {
-	border-bottom: thick double #1378bd;
+	border-bottom: 3px solid #1378bd;
 	color: #1378bd;
 	font-size: 20px;
 }
@@ -290,7 +293,7 @@ section#user h1 {
 	align-items: center;
 	width: 95%;
 	max-height: 95%;
-	overflow-y: scroll;
+	overflow-y: auto;
 }
 
 .transaction-details-header {
@@ -313,7 +316,7 @@ section#user h1 {
 
 .transaction-details-header h3 {
 	padding: 1vh 0;
-	border-bottom: thick double #1378bd;
+	border-bottom: 3px solid #1378bd;
 	text-transform: uppercase;
 }
 
@@ -441,7 +444,7 @@ section#user h1 {
 
 	/* user view */
 	.charts {
-		justify-content: space-between;
+		justify-content: space-around;
 		max-width: 1200px;
 	}
 
@@ -489,6 +492,7 @@ section#user h1 {
 		font-size: 18px;
 		font-weight: bold;
 		color: rgb(15, 92, 143);
+		border-bottom: 3px solid #1378bd;
 	}
 
 	.transactions thead .type {
@@ -501,7 +505,7 @@ section#user h1 {
 		font-size: 12px;
 	}
 
-	@media (min-height: 900px) {
+	/* @media (min-height: 900px) {
 		.charts {
 			height: 35%;
 		}
@@ -509,5 +513,5 @@ section#user h1 {
 		.transactions {
 			height: 65%;
 		}
-	}
+	} */
 }
