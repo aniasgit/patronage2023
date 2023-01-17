@@ -71,7 +71,7 @@ const createDateRow = (date) => {
 };
 
 const createTableData = (transactions) => {
-	let dates = getDates(transactions).reverse();
+	const dates = getTransactionsDates(transactions).reverse();
 
 	dates.forEach((date) => {
 		tableData.appendChild(createDateRow(date));

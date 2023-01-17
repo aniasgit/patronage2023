@@ -82,7 +82,7 @@ const createPieChart = (transactions, transactionTypes) => {
 };
 
 const setBarChartData = (transactions) => {
-	const dates = getDates(transactions);
+	const dates = getTransactionsDates(transactions);
 	const formatDates = dates.map((date) => formatDate(date));
 
 	dates.reverse();
@@ -161,4 +161,9 @@ const createBarChart = (transactions) => {
 	const barChartData = setBarChartData(transactions);
 	const barChartConfig = setBarChartConfig(barChartData);
 	barChart = new Chart(barChartCanvas, barChartConfig);
+};
+
+const destroyCharts = () => {
+	pieChart.destroy();
+	barChart.destroy();
 };

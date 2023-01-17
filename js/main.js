@@ -16,8 +16,8 @@ const setMockData = (dataArr) => {
 const routes = [];
 contents.forEach((content) => routes.push(content.id));
 
-const loggedUserId = localStorage.getItem("logged");
-let loggedUser = JSON.parse(localStorage.getItem(loggedUserId));
+const previousLoggedUserId = localStorage.getItem("logged");
+let loggedUser = JSON.parse(localStorage.getItem(previousLoggedUserId));
 
 // Setting views
 const setContent = (id) => {
@@ -104,8 +104,7 @@ const logout = () => {
 	transactionsData = [];
 	transactionTypes = {};
 	clearTableData();
-	pieChart.destroy();
-	barChart.destroy();
+	destroyCharts();
 	window.location.href = "#";
 };
 
@@ -131,7 +130,7 @@ const handleRegisterBtn = () => {
 	if (!validation.includes(false)) {
 		const newUser = {
 			userName: registrationUserName.value,
-			email: registrationEmail.value,
+			email: removeAlias(registrationEmail.value),
 			password: hash(registrationPassword.value),
 			dataId: "",
 		};
@@ -154,7 +153,7 @@ const handleLoginBtn = () => {
 	if (!validation.includes(false)) {
 		let userId;
 		if (loginUserNameEmail.value.match(EMAIL_REGEX)) {
-			userId = loginUserNameEmail.value;
+			userId = removeAlias(loginUserNameEmail.value);
 		} else {
 			userId = localStorage.getItem(loginUserNameEmail.value);
 		}
@@ -205,8 +204,7 @@ const setUserData = async () => {
 		userCharts.classList.add("hide");
 		userTransactions.classList.add("hide");
 		clearTableData();
-		pieChart.destroy();
-		barChart.destroy();
+		destroyCharts();
 	}
 };
 

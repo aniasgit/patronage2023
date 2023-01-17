@@ -5,7 +5,7 @@ const validateLoginEmailorUserName = () => {
 			loginUserNameMsg,
 			"Pole email lub nazwa użytkownika nie może być puste."
 		);
-	} else if (!existsInLocalStorage(loginUserNameEmail.value)) {
+	} else if (!existsInLocalStorage(removeAlias(loginUserNameEmail.value))) {
 		setMessage(loginUserNameMsg, "Taki użytkownik nie istnieje.");
 		if (loginUserNameEmail.value.match(EMAIL_REGEX)) {
 			registerDialog.classList.remove("hide");
@@ -85,13 +85,9 @@ const validateRegistrationPassword = () => {
 const validateRegistrationEmail = () => {
 	if (registrationEmail.value === "") {
 		setMessage(registrationEmailMsg, "Email nie może być pusty.");
-	} else if (
-		!registrationEmail.value.match(
-			/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-		)
-	) {
+	} else if (!registrationEmail.value.match(EMAIL_REGEX)) {
 		setMessage(registrationEmailMsg, "Nieprawidłowy format email.");
-	} else if (existsInLocalStorage(registrationEmail.value)) {
+	} else if (existsInLocalStorage(removeAlias(registrationEmail.value))) {
 		setMessage(registrationEmailMsg, "Ten adres email jest już zajęty");
 	} else {
 		clearMessage(registrationEmailMsg);

@@ -1,6 +1,12 @@
 const EMAIL_REGEX =
 	/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
+const ALIAS_REGEX = /\+[^@]*@/;
+
+const removeAlias = (email) => {
+	return email.replace(ALIAS_REGEX, "@");
+};
+
 const existsInLocalStorage = (key) => {
 	return !(localStorage.getItem(key) === null);
 };
@@ -16,7 +22,7 @@ const clearMessage = (messageComponent) => {
 };
 
 const clearForm = (form) => {
-	let inputs = form.querySelectorAll("input");
+	const inputs = form.querySelectorAll("input");
 	inputs.forEach((input) => (input.value = ""));
 
 	const validationMessages = form.querySelectorAll(".validation-msg");
@@ -34,16 +40,16 @@ const removeDuplicates = (arr) => {
 };
 
 const formatDate = (date) => {
-	const dateObjc = new Date(date);
+	const dateObj = new Date(date);
 
-	return dateObjc.toLocaleDateString("pl-PL", {
+	return dateObj.toLocaleDateString("pl-PL", {
 		day: "2-digit",
 		month: "2-digit",
 		year: "numeric",
 	});
 };
 
-const getDates = (transactions) => {
+const getTransactionsDates = (transactions) => {
 	let dates = transactions.map((transaction) => transaction.date);
 	dates = removeDuplicates(dates);
 	dates.sort();
