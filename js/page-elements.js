@@ -58,6 +58,8 @@ const transactionDetailsDialogExitBtn =
 	transactionDetailsDialog.querySelector(".exit-btn");
 const transactionDetailsDialogDate =
 	transactionDetailsDialog.querySelector("#transaction-date");
+const transactionDetailsDialogSenderReceiver =
+	transactionDetailsDialog.querySelector("#transaction-sender-receiver");
 const transactionDetailsDialogDescription =
 	transactionDetailsDialog.querySelector("#transaction-description");
 const transactionDetailsDialogAmount = transactionDetailsDialog.querySelector(

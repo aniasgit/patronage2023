@@ -44,12 +44,14 @@
                         <h1>Logowanie</h1>
                         <div>
                             <label for="login-user-name-or-email">Email lub nazwa użytkownika:</label>
-                            <input id="login-user-name-or-email">
+                            <input id="login-user-name-or-email" aria-required="true"
+                                aria-describedby="login-user-name-validation-msg">
                         </div>
                         <p id="login-user-name-validation-msg" class="validation-msg hide">Błedy walidacji</p>
                         <div>
                             <label for="login-password">Hasło:</label>
-                            <input id="login-password" type="password">
+                            <input id="login-password" type="password" aria-required="true"
+                                aria-describedby="login-password-validation-msg">
                         </div>
                         <p id="login-password-validation-msg" class="validation-msg hide">Błedy walidacji</p>
                         <button id="login-btn" class="btn primary-btn">Zaloguj</button>
@@ -72,22 +74,26 @@
                     <h1>Rejestracja</h1>
                     <div>
                         <label for="registration-user-name">Nazwa użytkownika:</label>
-                        <input id="registration-user-name" type="text">
+                        <input id="registration-user-name" type="text"
+                            aria-describedby="registration-user-name-validation-msg" aria-required="true">
                     </div>
                     <p id="registration-user-name-validation-msg" class="validation-msg hide">Błedy walidacji</p>
                     <div>
                         <label for="registration-password">Hasło:</label>
-                        <input id="registration-password" type="password">
+                        <input id="registration-password" type="password"
+                            aria-describedby="registration-password-validation-msg" aria-required="true">
                     </div>
                     <p id="registration-password-validation-msg" class="validation-msg hide">Błedy walidacji</p>
                     <div>
                         <label for="registration-email">Email:</label>
-                        <input id="registration-email">
+                        <input id="registration-email" aria-describedby="registration-email-validation-msg"
+                            aria-required="true">
                     </div>
                     <p id="registration-email-validation-msg" class="validation-msg hide">Błedy walidacji</p>
                     <div>
                         <label for="registration-confirm-email">Potwierdź email:</label>
-                        <input id="registration-confirm-email">
+                        <input id="registration-confirm-email"
+                            aria-describedby="registration-confirm-email-validation-msg" aria-required="true">
                     </div>
                     <p id="registration-confirm-email-validation-msg" class="validation-msg hide">Błedy walidacji</p>
                     <button id="register-btn" class="btn primary-btn">Zarejestruj</button>
@@ -99,11 +105,15 @@
             <div class="charts">
                 <div class="chart-container">
                     <h3>Transakcje według typów</h3>
-                    <canvas id="pie-chart"></canvas>
+                    <div class="chart">
+                        <canvas id="pie-chart"></canvas>
+                    </div>
                 </div>
                 <div class="chart-container">
-                    <h3>Saldo konta na koniec dnia</h3>
-                    <canvas id="bar-chart"></canvas>
+                    <h3>Dzienny bilans transakcji</h3>
+                    <div class="chart">
+                        <canvas id="bar-chart"></canvas>
+                    </div>
                 </div>
             </div>
             <div class="transactions">
@@ -111,6 +121,7 @@
                     <thead>
                         <td class="date">Data</td>
                         <td class="type">Typ</td>
+                        <td class="sender-receiver">Nadawca/Odbiorca</td>
                         <td class="description">Opis</td>
                         <td class="amount">Kwota</td>
                         <td class="balance">Saldo</td>
@@ -134,26 +145,30 @@
                     <div class="transaction-details">
                         <div class="detail">
                             <label for="transaction-date">Data transakcji:</label>
-                            <p id="transaction-date">30.01.2023</p>
+                            <p id="transaction-date"></p>
                         </div>
                         <div class="detail">
                             <label for="transaction-type">Typ transakcji:</label>
                             <div>
                                 <i id="transaction-type-icon" class="fa-solid fa-cart-shopping"></i>
-                                <span id="transaction-type">Wydatki zakupy</span>
+                                <span id="transaction-type"></span>
                             </div>
                         </div>
                         <div class="detail">
+                            <label for="transaction-sender-receiver">Nadawca/Odbiorca:</label>
+                            <p id="transaction-sender-receiver"></p>
+                        </div>
+                        <div class="detail">
                             <label for="transaction-description">Opis:</label>
-                            <p id="transaction-description">Biedronka 13</p>
+                            <p id="transaction-description"></p>
                         </div>
                         <div class="detail">
                             <label for="transaction-amount">Kwota:</label>
-                            <p id="transaction-amount">-25,70 PLN</p>
+                            <p id="transaction-amount"></p>
                         </div>
                         <div class="detail">
                             <label for="transaction-balance">Saldo:</label>
-                            <p id="transaction-balance">3000 PLN</p>
+                            <p id="transaction-balance"></p>
                         </div>
                     </div>
                 </div>

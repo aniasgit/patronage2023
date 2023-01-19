@@ -85,20 +85,21 @@ const setBarChartData = (transactions) => {
 	const dates = getTransactionsDates(transactions);
 	const formatDates = dates.map((date) => formatDate(date));
 
-	dates.reverse();
+	const dailyBalances = {};
 
-	let nextTransactionIndex = 0;
-	const balances = dates.map((date) => {
-		for (let i = nextTransactionIndex; i < transactions.length; i++) {
-			if (date === transactions[i].date) {
-				nextTransactionIndex = i + 1;
-				return transactions[i].balance;
-			}
+	transactions.forEach((transaction) => {
+		if (dailyBalances.hasOwnProperty(transaction.date)) {
+			dailyBalances[transaction.date] += transaction.amount;
+		} else {
+			dailyBalances[transaction.date] = transaction.amount;
 		}
 	});
-	balances.reverse();
 
-	const backgroundColors = balances.map((balance) => {
+	console.log(dailyBalances);
+	const data = dates.map((date) => dailyBalances[date]);
+	console.log(data);
+
+	const backgroundColors = data.map((balance) => {
 		if (balance < 0) {
 			return "rgba(255, 99, 132, 0.2)";
 		} else if (balance > 0) {
@@ -106,7 +107,7 @@ const setBarChartData = (transactions) => {
 		} else return "rgb(0, 0, 0)";
 	});
 
-	const borderColors = balances.map((balance) => {
+	const borderColors = data.map((balance) => {
 		if (balance < 0) {
 			return "rgb(255, 99, 132)";
 		} else if (balance > 0) {
@@ -118,8 +119,8 @@ const setBarChartData = (transactions) => {
 		labels: formatDates,
 		datasets: [
 			{
-				label: "Saldo w PLN",
-				data: balances,
+				label: "Bilans dzienny w PLN",
+				data: data,
 				backgroundColor: backgroundColors,
 				borderColor: borderColors,
 				borderWidth: 1,
@@ -134,8 +135,12 @@ const setBarChartConfig = (data) => {
 		data: data,
 		options: {
 			scales: {
+				x: {
+					display: true,
+					position: "bottom",
+				},
 				y: {
-					beginAtZero: true,
+					display: true,
 					grid: {
 						color: function (context) {
 							if (context.tick.value === 0) {
@@ -144,6 +149,16 @@ const setBarChartConfig = (data) => {
 								return Chart.defaults.borderColor;
 							}
 						},
+						lineWidth: function (context) {
+							if (context.tick.value === 0) {
+								return 2;
+							} else {
+								return 1;
+							}
+						},
+					},
+					ticks: {
+						beginAtZero: true,
 					},
 				},
 			},
@@ -164,6 +179,10 @@ const createBarChart = (transactions) => {
 };
 
 const destroyCharts = () => {
-	pieChart.destroy();
-	barChart.destroy();
+	if (pieChart !== undefined) {
+		pieChart.destroy();
+	}
+	if (barChart !== undefined) {
+		barChart.destroy();
+	}
 };

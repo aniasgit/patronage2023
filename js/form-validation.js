@@ -50,10 +50,20 @@ const validateRegistrationUserName = () => {
 			registrationUserNameMsg,
 			`Nazwa użytkownika nie może być dłuższa niż ${max} znaków.`
 		);
-	} else if (!/^[A-Za-z0-9]*$/.test(registrationUserName.value)) {
+	} else if (!/^[A-Za-z0-9\-_[\]\\\/]*$/.test(registrationUserName.value)) {
 		setMessage(
 			registrationUserNameMsg,
-			"Nazwa użytkownika może składać się tylko z liter lub cyfr."
+			"Nazwa użytkownika może składać się tylko z liter lub cyfr lub znaków -_[]\\/."
+		);
+	} else if (!checkLetters(registrationUserName.value)) {
+		setMessage(
+			registrationUserNameMsg,
+			"Nazwa użytkownika musi składać się przynajmniej z 5 liter."
+		);
+	} else if (!checkNumbers(registrationUserName.value)) {
+		setMessage(
+			registrationUserNameMsg,
+			"Nazwa użytkownika musi składać się przynajmniej z 1 cyfry."
 		);
 	} else if (existsInLocalStorage(registrationUserName.value)) {
 		setMessage(
@@ -114,4 +124,29 @@ const validateRegistrationConfirmEmail = () => {
 	}
 
 	return false;
+};
+
+const checkLetters = (phrase) => {
+	const minLettersQuantity = 5;
+	let lettersQuantity = 0;
+	for (char of phrase) {
+		if (char.match(/[a-zA-Z]/)) {
+			lettersQuantity++;
+		}
+	}
+
+	return lettersQuantity >= minLettersQuantity;
+};
+
+const checkNumbers = (phrase) => {
+	const minNumbersQuantity = 1;
+	let numbersQuantity = 0;
+
+	for (char of phrase) {
+		if (char.match(/[0-9]/)) {
+			numbersQuantity++;
+		}
+	}
+
+	return numbersQuantity >= minNumbersQuantity;
 };

@@ -41,18 +41,35 @@ const createTransactionCell = (transactionProperty, transaction) => {
 
 		transactionCell.appendChild(descriptionP);
 		transactionCell.appendChild(descriptionTypeP);
+	} else {
+		transactionCell.textContent = transaction[transactionProperty];
+		console.log(transaction[transactionProperty]);
 	}
-
+	console.log(transactionCell);
 	return transactionCell;
 };
 
 const createTransactionRow = (transaction) => {
 	const transactionRow = document.createElement("tr");
 	transactionRow.classList.add("transaction-row");
-	const properties = ["date", "type", "description", "amount", "balance"];
-	const cells = properties.map((property) =>
-		createTransactionCell(property, transaction)
-	);
+	const properties = [
+		"date",
+		"type",
+		"sender-receiver",
+		"description",
+		"amount",
+		"balance",
+	];
+	const cells = properties.map((property) => {
+		if (transaction[property] !== undefined) {
+			return createTransactionCell(property, transaction);
+		} else {
+			let temporaryTransaction = {};
+			temporaryTransaction[property] = "nieznany";
+			return createTransactionCell(property, temporaryTransaction);
+		}
+	});
+	console.log(cells);
 
 	cells.forEach((cell) => transactionRow.appendChild(cell));
 
@@ -95,6 +112,8 @@ const showTransactionDetails = (row) => {
 		row.querySelector("td.date").textContent;
 	transactionDetailsDialogDescription.textContent =
 		row.querySelector("td.description p").textContent;
+	transactionDetailsDialogSenderReceiver.textContent =
+		row.querySelector("td.sender-receiver").textContent;
 	transactionDetailsDialogAmount.textContent =
 		row.querySelector("td.amount").textContent;
 	transactionDetailsDialogBalance.textContent =

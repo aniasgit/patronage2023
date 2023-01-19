@@ -66,7 +66,7 @@ const setView = (id) => {
 	setNavbar(id);
 };
 
-const locationHandler = () => {
+const handleLocation = () => {
 	let location = window.location.hash.replace("#", "");
 	if (location === "") {
 		location = "home";
@@ -208,8 +208,8 @@ const setUserData = async () => {
 	}
 };
 
-window.addEventListener("hashchange", locationHandler);
-window.addEventListener("DOMContentLoaded", locationHandler);
+window.addEventListener("hashchange", handleLocation);
+window.addEventListener("DOMContentLoaded", handleLocation);
 
 registerBtn.addEventListener("click", handleRegisterBtn);
 loginBtn.addEventListener("click", handleLoginBtn);
