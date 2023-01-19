@@ -105,7 +105,7 @@ const logout = () => {
 	transactionTypes = {};
 	clearTableData();
 	destroyCharts();
-	window.location.href = "#";
+	window.location.href = "";
 };
 
 const checkLoginPassword = (userId) => {
