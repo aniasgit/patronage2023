@@ -68,6 +68,13 @@ const setView = (id) => {
 
 const handleLocation = () => {
 	let location = window.location.hash.replace("#", "");
+	if (
+		(location === "login" || location === "register") &&
+		loggedUser !== null
+	) {
+		location = "user";
+		window.location.href = "#user";
+	}
 	if (location === "") {
 		location = "home";
 	}
@@ -105,7 +112,6 @@ const logout = () => {
 	transactionTypes = {};
 	clearTableData();
 	destroyCharts();
-	window.location.href = "";
 };
 
 const checkLoginPassword = (userId) => {
